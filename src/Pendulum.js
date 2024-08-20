@@ -66,17 +66,30 @@ function Pendulum({ kP, kI, kD, target }) {
     renderRef.current = render;
     runnerRef.current = runner;
     pendulumRef.current = pendulum;
+
+    return () => {
+      Engine.clear(engine);
+      Render.stop(render);
+      Runner.stop(runner);
+      render.canvas.remove();
+      render.canvas = null;
+      render.context = null;
+      render.textures = {};
+    };
   }, []);
 
   useEffect(() => {
-    if (engineRef.current && pendulumRef.current) {
-      const engine = engineRef.current;
-      const pendulum = pendulumRef.current;
+    const engine = engineRef.current;
+    const pendulum = pendulumRef.current;
 
+    if (engine && pendulum) {
       pidRef.current = new PIDController(kP, kI, kD, pendulum.angle, target);
-      const pid = pidRef.current;
 
-      Events.on(engine, 'afterUpdate', () => pendulum.torque = bound(pid.step(pendulum.angle, 1)));
+      Events.on(engine, 'afterUpdate', () => pendulum.torque = bound(pidRef.current.step(pendulum.angle, 1)));
+    }
+
+    return () => {
+      Events.off(engine);
     }
   }, [kP, kI, kD, target]);
 
