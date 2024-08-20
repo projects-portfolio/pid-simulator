@@ -5,8 +5,8 @@ class PIDController {
     this.kD = kD;
 
     this.target = target;
-
-    this.reset(initial);
+    this.prev = this.target - initial;
+    this.integral = 0; 
   }
 
   step(state, timestep) {
@@ -19,12 +19,6 @@ class PIDController {
     const res = this.kP * error + this.kI * this.integral + this.kD * derivative;
 
     return res;
-  }
-
-  reset(initial, target = this.target) {
-    this.target = target;
-    this.prev = this.target - initial;
-    this.integral = 0;
   }
 }
 

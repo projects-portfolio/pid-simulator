@@ -18,7 +18,7 @@ function App() {
       <button onClick={() => {
         
       }}>reset</button>
-      <Pendulum target={target} />
+      <Pendulum kP={0.7} kI={0} kD={2} target={target} />
     </div>
   );
 }

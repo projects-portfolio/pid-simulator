@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { Engine, Render, Runner, Events, Bodies, Composite, Constraint } from 'matter-js';
 import PIDController from './PID.js';
 
-function Pendulum({ target }) {
-  const canvasRef = useRef(null);
-  const engineRef = useRef(null);
-  const renderRef = useRef(null);
-  const runnerRef = useRef(null);
-  const pendulumRef = useRef(null);
-  const pidRef = useRef(null);
+function Pendulum({ kP, kI, kD, target }) {
+  const canvasRef = useRef();
+  const engineRef = useRef();
+  const renderRef = useRef();
+  const runnerRef = useRef();
+  const pendulumRef = useRef();
+  const pidRef = useRef();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -66,28 +66,19 @@ function Pendulum({ target }) {
     renderRef.current = render;
     runnerRef.current = runner;
     pendulumRef.current = pendulum;
-    pidRef.current = new PIDController(0.7, 0, 10, pendulum.angle, Math.PI);
-
-    console.log("testing"); 
   }, []);
 
   useEffect(() => {
-    console.log(target)
-    if (engineRef.current && pendulumRef.current && pidRef.current) {
+    if (engineRef.current && pendulumRef.current) {
       const engine = engineRef.current;
       const pendulum = pendulumRef.current;
+
+      pidRef.current = new PIDController(kP, kI, kD, pendulum.angle, target);
       const pid = pidRef.current;
 
-      pid.reset(pendulum.angle, target);
-
-      const updateTorque = () => {
-        const input = bound(pid.step(pendulum.angle, 1));
-        pendulum.torque = input;
-      };
-
-      const eventListener = Events.on(engine, 'afterUpdate', updateTorque);
+      Events.on(engine, 'afterUpdate', () => pendulum.torque = bound(pid.step(pendulum.angle, 1)));
     }
-  }, [target]);
+  }, [kP, kI, kD, target]);
 
   function bound(value, lower = null, upper = null) {
     if (lower !== null && value < lower) {
