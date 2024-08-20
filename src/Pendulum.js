@@ -2,9 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { Engine, Render, Runner, Events, Bodies, Composite, Constraint } from 'matter-js';
 import PIDController from './PID.js';
 
-const innerWidth = 1000;
-const innerHeight = 1000;
-
 function Pendulum({ target }) {
   const canvasRef = useRef(null);
   const engineRef = useRef(null);
@@ -15,6 +12,10 @@ function Pendulum({ target }) {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+
+    const innerWidth = canvas.offsetWidth;
+    const innerHeight = canvas.offsetHeight;
+
     const engine = Engine.create({ gravity: { x: 0, y: 0 } });
     const render = Render.create({
       element: canvas,
