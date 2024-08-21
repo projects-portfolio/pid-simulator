@@ -12,70 +12,99 @@ export default function App() {
   const [kI, setKI] = useState(0);
   const [kD, setKD] = useState(200);
   const [frictionAir, setFrictionAir] = useState(0);
-  const [mass, setMass] = useState(0);
+  const [mass, setMass] = useState(1);
   const [gravity, setGravity] = useState(1);
 
+  const [inputTarget, setInputTarget] = useState(0);
+  const [inputKP, setInputKP] = useState(10);
+  const [inputKI, setInputKI] = useState(0);
+  const [inputKD, setInputKD] = useState(200);
+  const [inputFrictionAir, setInputFrictionAir] = useState(0);
+  const [inputMass, setInputMass] = useState(1);
+  const [inputGravity, setInputGravity] = useState(1);
+
   const handleResetClick = () => {
+    setInputTarget(0);
+    setInputKP(10);
+    setInputKI(0);
+    setInputKD(200);
+    setInputFrictionAir(0);
+    setInputMass(0);
+    setInputGravity(1);
     setTarget(0);
     setKP(10);
     setKI(0);
     setKD(200);
     setFrictionAir(0);
-    setMass(0);
+    setMass(1);
+    setGravity(1);
+  }
+
+  const handleUpdatePrefs = () => {
+    setTarget(inputTarget);
+    setKP(inputKP);
+    setKI(inputKI);
+    setKD(inputKD);
+    setFrictionAir(inputFrictionAir);
+    setMass(inputMass);
+    setGravity(inputGravity);
   }
 
   return (
     <div style={{ width: 1000, height: 1000 }}>
       <InputSlider 
         label="target"
-        value={target}
+        value={inputTarget}
         max={2 * Math.PI}
         step={Math.PI / 8}
-        handleChange={setTarget}
+        handleChange={setInputTarget}
       />
       <InputSlider 
         label="kP"
-        value={kP}
+        value={inputKP}
         max={20}
-        handleChange={setKP}
+        handleChange={setInputKP}
       />
       <InputSlider 
         label="kI"
-        value={kI}
+        value={inputKI}
         max={100}
         step={10}
-        handleChange={setKI}
+        handleChange={setInputKI}
       />
       <InputSlider 
         label="kD"
-        value={kD}
+        value={inputKD}
         max={1000}
         step={25}
-        handleChange={setKD}
+        handleChange={setInputKD}
       />
       <InputSlider 
         label="frictionAir"
-        value={frictionAir}
+        value={inputFrictionAir}
         max={5}
         step={0.1}
-        handleChange={setFrictionAir}
+        handleChange={setInputFrictionAir}
       />
       <InputSlider 
         label="mass"
-        value={mass}
+        value={inputMass}
+        min={1}
         max={5}
         step={0.1}
-        handleChange={setMass}
+        handleChange={setInputMass}
       />
       <InputSlider 
         label="gravity"
-        value={gravity}
-        max={5}
+        value={inputGravity}
+        min={0}
+        max={1}
         step={0.1}
-        handleChange={setGravity}
+        handleChange={setInputGravity}
       />
 
       <button onClick={handleResetClick}>Reset</button>
+      <button onClick={handleUpdatePrefs}>Load</button>
 
       <Pendulum kP={kP} kI={kI} kD={kD} target={target} frictionAir={frictionAir} mass={mass} gravity={gravity} />
     </div>
