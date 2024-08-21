@@ -33,7 +33,7 @@ function Pendulum({ kP, kI, kD, target }) {
 
     const pendulum = Bodies.rectangle(innerWidth / 2, innerHeight / 2, width, length, {
       friction: 0,
-      frictionAir: 0.02,
+      frictionAir: 0.04,
       mass: 0,
       chamfer: 5,
       render: {
@@ -85,7 +85,7 @@ function Pendulum({ kP, kI, kD, target }) {
     if (engine && pendulum) {
       pidRef.current = new PIDController(kP, kI, kD, pendulum.angle, target);
 
-      Events.on(engine, 'afterUpdate', () => pendulum.torque = bound(pidRef.current.step(pendulum.angle, 1)));
+      Events.on(engine, 'afterUpdate', () => pendulum.torque = bound(pidRef.current.step(pendulum.angle, 1), -5, 5));
     }
 
     return () => {

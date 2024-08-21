@@ -16,7 +16,7 @@ function App() {
         onChange={(e) => setInputValue(e.target.value)}
       />
       <button onClick={() => {if (inputValue !== "") setTarget(inputValue)}} >reset</button>
-      <Pendulum kP={0.7} kI={0} kD={2} target={target} />
+      <Pendulum kP={10} kI={0} kD={200} target={target} />
     </div>
   );
 }
