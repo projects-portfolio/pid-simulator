@@ -1,17 +1,27 @@
 import React, { useEffect, useRef } from 'react';
 import { Engine, Render, Runner, Events, Bodies, Composite, Constraint } from 'matter-js';
-import PIDController from './controller/PID.ts';
+import PIDController from '../controller/PID.ts';
 
-export default function Pendulum({ kP, kI, kD, target }) {
-  const canvasRef = useRef();
-  const engineRef = useRef();
-  const renderRef = useRef();
-  const runnerRef = useRef();
-  const pendulumRef = useRef();
-  const pidRef = useRef();
+interface PendulumProps {
+    kP: number;
+    kI: number;
+    kD: number;
+    target: number;
+    friction?: number;
+    frictionAir?: number;
+    mass?: number;
+}
+
+export default function Pendulum(props: PendulumProps) {
+  const canvasRef = useRef<HTMLCanvasElement>();
+  const engineRef = useRef<Engine>();
+  const renderRef = useRef<Render>();
+  const runnerRef = useRef<Runner>();
+  const pendulumRef = useRef<any>();
+  const pidRef = useRef<PIDController>();
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas = canvasRef.current!;
 
     const innerWidth = canvas.offsetWidth;
     const innerHeight = canvas.offsetHeight;
@@ -32,10 +42,9 @@ export default function Pendulum({ kP, kI, kD, target }) {
     const width = 25;
 
     const pendulum = Bodies.rectangle(innerWidth / 2, innerHeight / 2, width, length, {
-      friction: 0,
-      frictionAir: 0.04,
-      mass: 0,
-      chamfer: 0,
+      friction: props.friction ?? 0,
+      frictionAir: props.frictionAir ?? 0.04,
+      mass: props.mass ?? 0,
       render: {
         strokeStyle: '#fffb',
         fillStyle: 'transparent',
@@ -71,9 +80,9 @@ export default function Pendulum({ kP, kI, kD, target }) {
       Engine.clear(engine);
       Render.stop(render);
       Runner.stop(runner);
-      render.canvas.remove();
-      render.canvas = null;
-      render.context = null;
+      render.canvas?.remove();
+      //render.canvas = null;
+      //render.context = null;
       render.textures = {};
     };
   }, []);
@@ -83,17 +92,17 @@ export default function Pendulum({ kP, kI, kD, target }) {
     const pendulum = pendulumRef.current;
 
     if (engine && pendulum) {
-      pidRef.current = new PIDController(kP, kI, kD, pendulum.angle, target);
+      pidRef.current = new PIDController(props.kP, props.kI, props.kD, pendulum.angle, props.target);
 
-      Events.on(engine, 'afterUpdate', () => pendulum.torque = bound(pidRef.current.step(pendulum.angle, 1), -5, 5));
+      Events.on(engine, 'afterUpdate', () => pendulum.torque = bound(pidRef.current?.step(pendulum.angle, 1), -5, 5));
     }
 
     return () => {
       Events.off(engine);
     }
-  }, [kP, kI, kD, target]);
+  }, [props.kP, props.kI, props.kD, props.target]);
 
-  function bound(value, lower = null, upper = null) {
+  function bound(value: any, lower: number, upper: number) {
     if (lower !== null && value < lower) {
       return lower;
     } else if (upper !== null && value > upper) {

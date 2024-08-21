@@ -1,10 +1,10 @@
 export default class PIDController {
-  kP: number;
-  kI: number;
-  kD: number;
-  target: number;
-  prev: number;
-  integral: number;
+  private kP: number;
+  private kI: number;
+  private kD: number;
+  private target: number;
+  private prev: number;
+  private integral: number;
 
   constructor(kP, kI, kD, initial, target) {
     this.kP = kP;
