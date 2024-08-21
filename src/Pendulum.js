@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Engine, Render, Runner, Events, Bodies, Composite, Constraint } from 'matter-js';
-import PIDController from './PID.js';
+import PIDController from './PID.ts';
 
 function Pendulum({ kP, kI, kD, target }) {
   const canvasRef = useRef();
@@ -35,7 +35,7 @@ function Pendulum({ kP, kI, kD, target }) {
       friction: 0,
       frictionAir: 0.04,
       mass: 0,
-      chamfer: 5,
+      chamfer: 0,
       render: {
         strokeStyle: '#fffb',
         fillStyle: 'transparent',

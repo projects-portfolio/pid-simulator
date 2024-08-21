@@ -1,5 +1,19 @@
+body {
+  font-size: 2.2vh;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #3a3838;
+  background-position: center;
+  background-size: cover;
+}
+
 .App {
   text-align: center;
+  height: 100%;
+  width: 100%;
 }
 
 .App-logo {

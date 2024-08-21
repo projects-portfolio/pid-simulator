@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Pendulum from './Pendulum.js'
+import { Slider } from '@mui/material';
 
 function App() {
   // https://codepen.io/rafaelcastrocouto/pen/NWajBgM
@@ -12,10 +13,22 @@ function App() {
     <div style={{ width: 1000, height: 1000 }}>
       <input
         type="number"
-        defaultValue={0}
-        onChange={(e) => setInputValue(e.target.value)}
+        value={inputValue}
+        min={0}
+        max={10}
+        onChange={(e) => setInputValue(e.target.valueAsNumber)}
       />
-      <button onClick={() => {if (inputValue !== "") setTarget(inputValue)}} >reset</button>
+      <button onClick={() => {setTarget(inputValue)}} >reset</button>
+
+      <Slider
+        value={target}
+        min={0}
+        max={2 * Math.PI}
+        step={Math.PI / 8}
+        valueLabelDisplay="auto"
+        onChange={(e, value) => setTarget(value as number)}
+      />
+      
       <Pendulum kP={10} kI={0} kD={200} target={target} />
     </div>
   );
