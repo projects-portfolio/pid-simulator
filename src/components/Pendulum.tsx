@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Engine, Render, Runner, Events, Bodies, Composite, Constraint } from 'matter-js';
+import { Engine, Render, Runner, Events, Body, Bodies, Composite, Constraint } from 'matter-js';
 import PIDController from '../controller/PID.ts';
 
 interface PendulumProps {
@@ -7,13 +7,13 @@ interface PendulumProps {
     kI: number;
     kD: number;
     target: number;
-    friction?: number;
     frictionAir?: number;
     mass?: number;
+    gravity?: number;
 }
 
 export default function Pendulum(props: PendulumProps) {
-  const canvasRef = useRef<HTMLCanvasElement>();
+  const canvasRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<Engine>();
   const renderRef = useRef<Render>();
   const runnerRef = useRef<Runner>();
@@ -26,7 +26,7 @@ export default function Pendulum(props: PendulumProps) {
     const innerWidth = canvas.offsetWidth;
     const innerHeight = canvas.offsetHeight;
 
-    const engine = Engine.create({ gravity: { x: 0, y: 0 } });
+    const engine = Engine.create({ gravity: { x: 0, y: 1 } });
     const render = Render.create({
       element: canvas,
       engine: engine,
@@ -42,9 +42,8 @@ export default function Pendulum(props: PendulumProps) {
     const width = 25;
 
     const pendulum = Bodies.rectangle(innerWidth / 2, innerHeight / 2, width, length, {
-      friction: props.friction ?? 0,
-      frictionAir: props.frictionAir ?? 0.04,
-      mass: props.mass ?? 0,
+      frictionAir: 0,
+      mass: 0,
       render: {
         strokeStyle: '#fffb',
         fillStyle: 'transparent',
@@ -98,9 +97,22 @@ export default function Pendulum(props: PendulumProps) {
     }
 
     return () => {
-      Events.off(engine);
+      Events.off(engine, '', () => {});
     }
   }, [props.kP, props.kI, props.kD, props.target]);
+
+  useEffect(() => {
+    const engine = engineRef.current;
+    const pendulum = pendulumRef.current;
+
+    if (engine && pendulum && props.frictionAir && props.mass && props.gravity) {
+      pendulum.frictionAir = props.frictionAir;
+      Body.setMass(pendulum, props.mass);
+      engine.gravity = {scale: 0.01, x: 0, y: props.gravity};
+    }
+
+    return () => {};
+  }, [props.frictionAir, props.mass, props.gravity]);
 
   function bound(value: any, lower: number, upper: number) {
     if (lower !== null && value < lower) {
