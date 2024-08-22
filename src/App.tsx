@@ -93,7 +93,7 @@ export default function App() {
         <InputSlider 
           label="frictionAir"
           value={inputFrictionAir}
-          max={5}
+          max={1}
           step={0.1}
           handleChange={setInputFrictionAir}
         />
