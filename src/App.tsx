@@ -23,6 +23,8 @@ export default function App() {
   const [inputMass, setInputMass] = useState(1);
   const [inputGravity, setInputGravity] = useState(1);
 
+  const [angle, setAngle] = useState(0);
+
   const handleResetClick = () => {
     setInputTarget(0);
     setInputKP(10);
@@ -104,8 +106,9 @@ export default function App() {
 
       <button onClick={handleResetClick}>Reset</button>
       <button onClick={handleUpdatePrefs}>Load</button>
+      <p>{angle}</p>
 
-      <Pendulum kP={kP} kI={kI} kD={kD} target={target} frictionAir={frictionAir} mass={mass} gravity={gravity} />
+      <Pendulum kP={kP} kI={kI} kD={kD} target={target} frictionAir={frictionAir} mass={mass} gravity={gravity} setAngle={setAngle}/>
     </div>
   );
 }
