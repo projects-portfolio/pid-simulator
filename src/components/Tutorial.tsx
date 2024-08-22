@@ -18,7 +18,6 @@ export default function Tutorial() {
             </Tooltip>
             <Modal
                 open={open}
-                onClose={handleToggle}
                 aria-labelledby="tutorial-title"
                 aria-describedby="tutorial-description"
             >
