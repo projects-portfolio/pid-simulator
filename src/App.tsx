@@ -5,7 +5,7 @@ import Pendulum from './components/Pendulum.tsx'
 import Graph from './components/Graph.tsx'
 import InputSlider from './components/InputSlider.tsx'
 import Tutorial from './components/Tutorial.tsx'
-import { IconButton } from '@mui/material'
+import { IconButton, Button } from '@mui/material'
 import { PlayCircle, PauseCircle } from '@mui/icons-material'
 
 export default function App() {
@@ -31,6 +31,7 @@ export default function App() {
   const [data, setData] = useState([]);
   
   const [playState, setPlayState] = useState(false);
+  const [resetState, setResetState] = useState(true);
 
   const handleResetClick = () => {
     setInputTarget(0);
@@ -49,6 +50,7 @@ export default function App() {
     setGravity(0);
     setData([])
     setPlayState(false);
+    setResetState(true);
   }
 
   const handleUpdatePrefs = () => {
@@ -72,7 +74,19 @@ export default function App() {
       </div>
 
       <div className="pendulum-container">
-        <Pendulum kP={kP} kI={kI} kD={kD} target={target} frictionAir={frictionAir} mass={mass} gravity={gravity} />
+        <Pendulum 
+          kP={kP} 
+          kI={kI} 
+          kD={kD} 
+          target={target} 
+          frictionAir={frictionAir} 
+          mass={mass} 
+          gravity={gravity}
+          setData={setData}
+          paused={!playState} 
+          reset={resetState}
+          setReset={setResetState}
+        />
       </div>
 
       <div className="slider-container">
@@ -127,9 +141,15 @@ export default function App() {
         />
 
         <div className="buttons-container">
-          <button onClick={handleResetClick}>Reset</button>
-          <button onClick={handleUpdatePrefs}>Load</button> 
+          <Button onClick={handleResetClick}>Reset</Button>
+          <Button onClick={handleUpdatePrefs} disabled={playState}>Load</Button>
+          <IconButton onClick={handleTogglePlay}>
+            {playState && <PauseCircle />}
+            {!playState && <PlayCircle />}
+          </IconButton>
         </div>
+
+        <Graph data={data} />
       </div>
     </div>
   );

@@ -12,9 +12,10 @@ interface PendulumProps {
     frictionAir: number;
     mass: number;
     gravity: number;
-
     setData: Function;
     paused: boolean;
+    reset: boolean;
+    setReset: Function;
 }
 
 export default function Pendulum(props: PendulumProps) {
@@ -80,6 +81,8 @@ export default function Pendulum(props: PendulumProps) {
     runnerRef.current = runner;
     pendulumRef.current = pendulum;
 
+    props.setReset(false);
+
     return () => {
       Engine.clear(engine);
       Render.stop(render);
@@ -89,17 +92,13 @@ export default function Pendulum(props: PendulumProps) {
       // render.context = null;
       render.textures = {};
     };
-  }, []);
+  }, [props.reset, props.setReset]);
 
   useEffect(() => {
-    if (props.paused) {
-        return;
-    }
-
     const engine = engineRef.current;
     const pendulum = pendulumRef.current;
 
-    if (engine && pendulum) {
+    if (engine && pendulum && !props.paused) {
       pidRef.current = new PIDController(props.kP, props.kI, props.kD, pendulum.angle, props.target);
 
       function applyTorque(pid) {
@@ -116,7 +115,7 @@ export default function Pendulum(props: PendulumProps) {
     return () => {
       Events.off(engine, '', () => {});
     }
-  }, [props.kP, props.kI, props.kD, props.target, props.setData]);
+  }, [props.kP, props.kI, props.kD, props.target, props.setData, props.paused]);
 
   useEffect(() => {
     const engine = engineRef.current;
