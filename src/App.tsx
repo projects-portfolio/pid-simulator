@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
 import './App.css';
+
+import React, { useState } from 'react';
 import Pendulum from './components/Pendulum.tsx'
 import Graph from './components/Graph.tsx'
 import InputSlider from './components/InputSlider.tsx'
+import Tutorial from './components/Tutorial.tsx'
 import { IconButton } from '@mui/material'
 import { PlayCircle, PauseCircle } from '@mui/icons-material'
 
@@ -64,77 +66,71 @@ export default function App() {
   }
 
   return (
-    <div style={{ width: 1000, height: 1000 }}>
-      <InputSlider 
-        label="target"
-        value={inputTarget}
-        max={2 * Math.PI}
-        step={Math.PI / 8}
-        handleChange={setInputTarget}
-      />
-      <InputSlider 
-        label="kP"
-        value={inputKP}
-        max={20}
-        handleChange={setInputKP}
-      />
-      <InputSlider 
-        label="kI"
-        value={inputKI}
-        max={100}
-        step={10}
-        handleChange={setInputKI}
-      />
-      <InputSlider 
-        label="kD"
-        value={inputKD}
-        max={1000}
-        step={25}
-        handleChange={setInputKD}
-      />
-      <InputSlider 
-        label="frictionAir"
-        value={inputFrictionAir}
-        max={5}
-        step={0.1}
-        handleChange={setInputFrictionAir}
-      />
-      <InputSlider 
-        label="mass"
-        value={inputMass}
-        min={1}
-        max={5}
-        step={0.1}
-        handleChange={setInputMass}
-      />
-      <InputSlider 
-        label="gravity"
-        value={inputGravity}
-        max={10}
-        step={0.1}
-        handleChange={setInputGravity}
-      />
+    <div className="main-container">
+      <div className="tutorial-container">
+        <Tutorial/>
+      </div>
 
-      <button onClick={handleResetClick}>Reset</button>
-      <button onClick={handleUpdatePrefs}>Load</button>
-      
-      <IconButton onClick={handleTogglePlay} size="large">
-        {playState && <PauseCircle />}
-        {!playState && <PlayCircle />}
-      </IconButton>
+      <div className="pendulum-container">
+        <Pendulum kP={kP} kI={kI} kD={kD} target={target} frictionAir={frictionAir} mass={mass} gravity={gravity} />
+      </div>
 
-      <Pendulum 
-        kP={kP} 
-        kI={kI} 
-        kD={kD} 
-        target={target} 
-        frictionAir={frictionAir} 
-        mass={mass} 
-        gravity={gravity} 
-        setData={setData}
-        paused={!playState}
-      />
-      <Graph data={data} />
+      <div className="slider-container">
+        <InputSlider 
+          label="target"
+          value={inputTarget}
+          max={2 * Math.PI}
+          step={Math.PI / 8}
+          handleChange={setInputTarget}
+        />
+        <InputSlider 
+          label="kP"
+          value={inputKP}
+          max={20}
+          handleChange={setInputKP}
+        />
+        <InputSlider 
+          label="kI"
+          value={inputKI}
+          max={100}
+          step={10}
+          handleChange={setInputKI}
+        />
+        <InputSlider 
+          label="kD"
+          value={inputKD}
+          max={1000}
+          step={25}
+          handleChange={setInputKD}
+        />
+        <InputSlider 
+          label="frictionAir"
+          value={inputFrictionAir}
+          max={1}
+          step={0.1}
+          handleChange={setInputFrictionAir}
+        />
+        <InputSlider 
+          label="mass"
+          value={inputMass}
+          min={1}
+          max={5}
+          step={0.1}
+          handleChange={setInputMass}
+        />
+        <InputSlider 
+          label="gravity"
+          value={inputGravity}
+          max={10}
+          step={0.1}
+          handleChange={setInputGravity}
+        />
+
+        <div className="buttons-container">
+          <button onClick={handleResetClick}>Reset</button>
+          <button onClick={handleUpdatePrefs}>Load</button> 
+        </div>
+      </div>
     </div>
   );
 }

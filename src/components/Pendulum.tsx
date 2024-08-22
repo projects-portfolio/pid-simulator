@@ -1,3 +1,5 @@
+import './Pendulum.css';
+
 import React, { useEffect, useRef } from 'react';
 import { Engine, Render, Runner, Events, Body, Bodies, Composite, Constraint } from 'matter-js';
 import PIDController from '../controller/PID.ts';
@@ -138,5 +140,5 @@ export default function Pendulum(props: PendulumProps) {
     return value;
   }
 
-  return <div ref={canvasRef} style={{ width: '100%', height: '100%' }}></div>;
+  return <div ref={canvasRef} className="canvas"></div>;
 }
