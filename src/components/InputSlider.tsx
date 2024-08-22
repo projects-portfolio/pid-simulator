@@ -4,6 +4,7 @@ import { Slider } from '@mui/material';
 
 interface InputSliderProps {
     label?: string,
+    name: string,
     value: number,
     min?: number;
     max: number;
@@ -12,14 +13,18 @@ interface InputSliderProps {
 }
 
 export default function InputSlider(props: InputSliderProps) {
-    const handleInputChange = (event) => { props.handleChange(event.target.value); }
-    const handleSliderChange = (e, value) => { props.handleChange(value as number); }
+    const handleInputChange = (e) => { 
+        console.log(e.target.name);
+        console.log(e.target.value);
+        props.handleChange(e); 
+    }
 
     return (
         <>
             {props.label !== null && <h3>{props.label}</h3>}
 
             <input
+                name={props.name}
                 type="number"
                 value={props.value}
                 min={props.min ?? 0}
@@ -28,12 +33,13 @@ export default function InputSlider(props: InputSliderProps) {
             />
 
             <Slider
+                name={props.name}
                 value={props.value}
                 min={props.min ?? 0}
                 max={props.max}
                 step={props.step ?? 1}
                 valueLabelDisplay="auto"
-                onChange={handleSliderChange}
+                onChange={handleInputChange}
             />
         </>
     );

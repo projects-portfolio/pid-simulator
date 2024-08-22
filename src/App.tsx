@@ -12,60 +12,88 @@ export default function App() {
   // https://codepen.io/rafaelcastrocouto/pen/NWajBgM
   // https://blog.stackademic.com/matter-js-with-react-and-learn-to-use-useref-effectively-8f57365b926e
 
-  const [target, setTarget] = useState(0);
-  const [kP, setKP] = useState(10);
-  const [kI, setKI] = useState(0);
-  const [kD, setKD] = useState(200);
-  const [frictionAir, setFrictionAir] = useState(0);
-  const [mass, setMass] = useState(1);
-  const [gravity, setGravity] = useState(0);
+  const [currentConstants, setCurrentConstants] = useState(
+    {
+      target: 0,
+      kP: 10,
+      kI: 0,
+      kD: 200,
+      frictionAir: 0,
+      mass: 1,
+      gravity: 0,
+    }
+  );
 
-  const [inputTarget, setInputTarget] = useState(0);
-  const [inputKP, setInputKP] = useState(10);
-  const [inputKI, setInputKI] = useState(0);
-  const [inputKD, setInputKD] = useState(200);
-  const [inputFrictionAir, setInputFrictionAir] = useState(0);
-  const [inputMass, setInputMass] = useState(1);
-  const [inputGravity, setInputGravity] = useState(1);
+  const [inputFields, setInputFields] = useState(
+    {
+      target: 0,
+      kP: 10,
+      kI: 0,
+      kD: 200,
+      frictionAir: 0,
+      mass: 1,
+      gravity: 0,
+    }
+  )
 
-  const [data, setData] = useState([]);
+  const [positionData, setPositionData] = useState([]);
+  const [powerData, setPowerData] = useState([]);
   
   const [playState, setPlayState] = useState(false);
   const [resetState, setResetState] = useState(true);
 
   const handleResetClick = () => {
-    setInputTarget(0);
-    setInputKP(10);
-    setInputKI(0);
-    setInputKD(200);
-    setInputFrictionAir(0);
-    setInputMass(0);
-    setInputGravity(1);
-    setTarget(0);
-    setKP(10);
-    setKI(0);
-    setKD(200);
-    setFrictionAir(0);
-    setMass(1);
-    setGravity(0);
-    setData([])
+    setInputFields(
+      {
+        target: 0,
+        kP: 10,
+        kI: 0,
+        kD: 200,
+        frictionAir: 0,
+        mass: 1,
+        gravity: 0,
+      }
+    );
+
+    setPositionData([]);
+    setPowerData([]);
+
     setPlayState(false);
     setResetState(true);
   }
 
   const handleUpdatePrefs = () => {
-    setTarget(inputTarget);
-    setKP(inputKP);
-    setKI(inputKI);
-    setKD(inputKD);
-    setFrictionAir(inputFrictionAir);
-    setMass(inputMass);
-    setGravity(inputGravity);
+    setCurrentConstants(
+      {
+        ...inputFields,
+      }
+    )
   }
 
   const handleTogglePlay = () => {
     setPlayState(!playState);
   }
+
+  const handleUpdateInput = (e) => {
+    setInputFields(
+      {
+        ...inputFields,
+        [e.target.name]: e.target.value, 
+      }
+    );
+    console.log(e.target.name);
+  }
+
+  // const handleUpdateMetrics = (...datapoint) => {
+  //   setMetrics(
+  //     {
+  //       position: (data) => [...data, datapoint[0]],
+  //       power: (data) => [...data, datapoint[1]],
+  //     }
+  //   )
+  //   console.log("Power: " + JSON.stringify(metrics.power));
+  //   console.log("Position: " + JSON.stringify(metrics.position));
+  // }
 
   return (
     <div className="main-container">
@@ -75,69 +103,71 @@ export default function App() {
 
       <div className="pendulum-container">
         <Pendulum 
-          kP={kP} 
-          kI={kI} 
-          kD={kD} 
-          target={target} 
-          frictionAir={frictionAir} 
-          mass={mass} 
-          gravity={gravity}
-          setData={setData}
+          {...currentConstants}
           paused={!playState} 
           reset={resetState}
           setReset={setResetState}
+          setPosition={setPositionData}
+          setPower={setPowerData}
         />
       </div>
 
       <div className="slider-container">
         <InputSlider 
-          label="target"
-          value={inputTarget}
+          name="target"
+          label="Target Angle (in Radians)"
+          value={inputFields.target}
           max={2 * Math.PI}
           step={Math.PI / 8}
-          handleChange={setInputTarget}
+          handleChange={handleUpdateInput}
         />
         <InputSlider 
-          label="kP"
-          value={inputKP}
+          name="kP"
+          label="kP: Proportion Constant"
+          value={inputFields.kP}
           max={20}
-          handleChange={setInputKP}
+          handleChange={handleUpdateInput}
         />
         <InputSlider 
-          label="kI"
-          value={inputKI}
+          name="kI"
+          label="kI: Integral Constant"
+          value={inputFields.kI}
           max={100}
           step={10}
-          handleChange={setInputKI}
+          handleChange={handleUpdateInput}
         />
         <InputSlider 
-          label="kD"
-          value={inputKD}
+          name="kD"
+          label="kD: Derivative Constant"
+          value={inputFields.kD}
           max={1000}
           step={25}
-          handleChange={setInputKD}
+          handleChange={handleUpdateInput}
         />
         <InputSlider 
-          label="frictionAir"
-          value={inputFrictionAir}
+          name="frictionAir"
+          label="Air Resistance"
+          value={inputFields.frictionAir}
           max={1}
           step={0.1}
-          handleChange={setInputFrictionAir}
+          handleChange={handleUpdateInput}
         />
         <InputSlider 
-          label="mass"
-          value={inputMass}
+          name="mass"
+          label="Mass of Pendulum"
+          value={inputFields.mass}
           min={1}
           max={5}
           step={0.1}
-          handleChange={setInputMass}
+          handleChange={handleUpdateInput}
         />
         <InputSlider 
-          label="gravity"
-          value={inputGravity}
+          name="gravity"
+          label="Gravity"
+          value={inputFields.gravity}
           max={10}
           step={0.1}
-          handleChange={setInputGravity}
+          handleChange={handleUpdateInput}
         />
 
         <div className="buttons-container">
@@ -148,8 +178,21 @@ export default function App() {
             {!playState && <PlayCircle />}
           </IconButton>
         </div>
+      </div>
 
-        <Graph data={data} />
+      <div className="graphs-container">
+        <Graph 
+          label="Angular Position (in Radians)"
+          data={positionData}
+          backgroundColor="rgb(255, 99, 132)"
+          borderColor="rgb(255, 99, 132)"
+        />
+        <Graph 
+          label="Power Output"
+          data={powerData}
+          backgroundColor="rgb(99, 141, 255)"
+          borderColor="rgb(99, 141, 255)"
+        />
       </div>
     </div>
   );

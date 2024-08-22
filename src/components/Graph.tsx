@@ -3,7 +3,10 @@ import 'chart.js/auto';
 import { Line } from "react-chartjs-2";
 
 interface GraphProps {
+  label: string;
   data: number[];
+  backgroundColor: string;
+  borderColor: string;
 }
 
 export default function Graph(props: GraphProps) {
@@ -11,9 +14,9 @@ export default function Graph(props: GraphProps) {
     labels: props.data,
     datasets: [
       {
-        label: "My First dataset",
-        backgroundColor: "rgb(255, 99, 132)",
-        borderColor: "rgb(255, 99, 132)",
+        label: props.label,
+        backgroundColor: props.backgroundColor,
+        borderColor: props.borderColor,
         data: props.data,
       },
     ],
