@@ -107,7 +107,6 @@ export default function App() {
 
       <button onClick={handleResetClick}>Reset</button>
       <button onClick={handleUpdatePrefs}>Load</button>
-      <p>{data}</p>
 
       <Pendulum kP={kP} kI={kI} kD={kD} target={target} frictionAir={frictionAir} mass={mass} gravity={gravity} setData={setData}/>
       <Graph data={data} />

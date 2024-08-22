@@ -8,7 +8,7 @@ interface GraphProps {
 
 export default function Graph(props: GraphProps) {
   const data = {
-    labels: Array.from({ length: props.data.length }, (_, index) => index),
+    labels: props.data,
     datasets: [
       {
         label: "My First dataset",
