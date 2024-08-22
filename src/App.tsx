@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import Pendulum from './components/Pendulum.tsx'
+import Graph from './components/Graph.tsx'
 import InputSlider from './components/InputSlider.tsx'
 
 export default function App() {
@@ -23,7 +24,7 @@ export default function App() {
   const [inputMass, setInputMass] = useState(1);
   const [inputGravity, setInputGravity] = useState(1);
 
-  const [angle, setAngle] = useState(0);
+  const [data, setData] = useState([]);
 
   const handleResetClick = () => {
     setInputTarget(0);
@@ -106,9 +107,10 @@ export default function App() {
 
       <button onClick={handleResetClick}>Reset</button>
       <button onClick={handleUpdatePrefs}>Load</button>
-      <p>{angle}</p>
+      <p>{data}</p>
 
-      <Pendulum kP={kP} kI={kI} kD={kD} target={target} frictionAir={frictionAir} mass={mass} gravity={gravity} setAngle={setAngle}/>
+      <Pendulum kP={kP} kI={kI} kD={kD} target={target} frictionAir={frictionAir} mass={mass} gravity={gravity} setData={setData}/>
+      <Graph data={data} />
     </div>
   );
 }

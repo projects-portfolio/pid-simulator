@@ -7,11 +7,11 @@ interface PendulumProps {
     kI: number;
     kD: number;
     target: number;
-    frictionAir?: number;
-    mass?: number;
-    gravity?: number;
+    frictionAir: number;
+    mass: number;
+    gravity: number;
 
-    setAngle?: Function;
+    setData: Function;
 }
 
 export default function Pendulum(props: PendulumProps) {
@@ -82,8 +82,8 @@ export default function Pendulum(props: PendulumProps) {
       Render.stop(render);
       Runner.stop(runner);
       render.canvas?.remove();
-      //render.canvas = null;
-      //render.context = null;
+      // render.canvas = null;
+      // render.context = null;
       render.textures = {};
     };
   }, []);
@@ -95,28 +95,27 @@ export default function Pendulum(props: PendulumProps) {
     if (engine && pendulum) {
       pidRef.current = new PIDController(props.kP, props.kI, props.kD, pendulum.angle, props.target);
 
-      function applyTorque() {
-        pendulum.torque = bound(pidRef.current?.step(pendulum.angle, 1), -5, 5);
+      function applyTorque(pid) {
+        pendulum.torque = bound(pid.step(pendulum.angle, 1), -5, 5);
 
-        if (props.setAngle) {
-          const update = props.setAngle;
-          update(pendulum.angle);
-        } 
+        // directly calling setData yields a warning
+        const update = props.setData;
+        update((data) => [...data, pendulum.angle]);
       }
 
-      Events.on(engine, 'afterUpdate', applyTorque);
+      Events.on(engine, 'afterUpdate', () => applyTorque(pidRef.current));
     }
 
     return () => {
       Events.off(engine, '', () => {});
     }
-  }, [props.kP, props.kI, props.kD, props.target, props.setAngle]);
+  }, [props.kP, props.kI, props.kD, props.target, props.setData]);
 
   useEffect(() => {
     const engine = engineRef.current;
     const pendulum = pendulumRef.current;
 
-    if (engine && pendulum && props.frictionAir !== undefined && props.mass !== undefined && props.gravity !== undefined) {
+    if (engine && pendulum) {
       pendulum.frictionAir = props.frictionAir;
       Body.setMass(pendulum, props.mass);
       engine.gravity = {scale: props.gravity / 1000, x: 0, y: 1};
