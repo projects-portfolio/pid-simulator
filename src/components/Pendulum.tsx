@@ -28,7 +28,7 @@ export default function Pendulum(props: PendulumProps) {
     const innerWidth = canvas.offsetWidth;
     const innerHeight = canvas.offsetHeight;
 
-    const engine = Engine.create({ gravity: { scale: 0, x: 0, y: 1 } });
+    const engine = Engine.create({ gravity: { scale: 0.001, x: 0, y: 1 } });
     const render = Render.create({
       element: canvas,
       engine: engine,
