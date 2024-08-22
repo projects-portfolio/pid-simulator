@@ -12,6 +12,7 @@ interface PendulumProps {
     gravity: number;
 
     setData: Function;
+    paused: boolean;
 }
 
 export default function Pendulum(props: PendulumProps) {
@@ -89,6 +90,10 @@ export default function Pendulum(props: PendulumProps) {
   }, []);
 
   useEffect(() => {
+    if (props.paused) {
+        return;
+    }
+
     const engine = engineRef.current;
     const pendulum = pendulumRef.current;
 

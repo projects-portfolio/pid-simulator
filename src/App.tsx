@@ -3,6 +3,8 @@ import './App.css';
 import Pendulum from './components/Pendulum.tsx'
 import Graph from './components/Graph.tsx'
 import InputSlider from './components/InputSlider.tsx'
+import { IconButton } from '@mui/material'
+import { PlayCircle, PauseCircle } from '@mui/icons-material'
 
 export default function App() {
   // https://codepen.io/rafaelcastrocouto/pen/NWajBgM
@@ -25,6 +27,8 @@ export default function App() {
   const [inputGravity, setInputGravity] = useState(1);
 
   const [data, setData] = useState([]);
+  
+  const [playState, setPlayState] = useState(false);
 
   const handleResetClick = () => {
     setInputTarget(0);
@@ -41,6 +45,8 @@ export default function App() {
     setFrictionAir(0);
     setMass(1);
     setGravity(0);
+    setData([])
+    setPlayState(false);
   }
 
   const handleUpdatePrefs = () => {
@@ -51,6 +57,10 @@ export default function App() {
     setFrictionAir(inputFrictionAir);
     setMass(inputMass);
     setGravity(inputGravity);
+  }
+
+  const handleTogglePlay = () => {
+    setPlayState(!playState);
   }
 
   return (
@@ -107,8 +117,23 @@ export default function App() {
 
       <button onClick={handleResetClick}>Reset</button>
       <button onClick={handleUpdatePrefs}>Load</button>
+      
+      <IconButton onClick={handleTogglePlay} size="large">
+        {playState && <PauseCircle />}
+        {!playState && <PlayCircle />}
+      </IconButton>
 
-      <Pendulum kP={kP} kI={kI} kD={kD} target={target} frictionAir={frictionAir} mass={mass} gravity={gravity} setData={setData}/>
+      <Pendulum 
+        kP={kP} 
+        kI={kI} 
+        kD={kD} 
+        target={target} 
+        frictionAir={frictionAir} 
+        mass={mass} 
+        gravity={gravity} 
+        setData={setData}
+        paused={!playState}
+      />
       <Graph data={data} />
     </div>
   );
