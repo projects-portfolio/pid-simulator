@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Pendulum from './components/Pendulum.tsx'
 import InputSlider from './components/InputSlider.tsx'
+import Tutorial from './components/Tutorial.tsx'
 
 export default function App() {
   // https://codepen.io/rafaelcastrocouto/pen/NWajBgM
@@ -52,6 +53,8 @@ export default function App() {
 
   return (
     <div style={{ width: 1000, height: 1000 }}>
+      <Tutorial/>
+
       <InputSlider 
         label="target"
         value={inputTarget}
