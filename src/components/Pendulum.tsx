@@ -26,7 +26,7 @@ export default function Pendulum(props: PendulumProps) {
     const innerWidth = canvas.offsetWidth;
     const innerHeight = canvas.offsetHeight;
 
-    const engine = Engine.create({ gravity: { x: 0, y: 1 } });
+    const engine = Engine.create({ gravity: { scale: 0, x: 0, y: 1 } });
     const render = Render.create({
       element: canvas,
       engine: engine,
@@ -43,7 +43,7 @@ export default function Pendulum(props: PendulumProps) {
 
     const pendulum = Bodies.rectangle(innerWidth / 2, innerHeight / 2, width, length, {
       frictionAir: 0,
-      mass: 0,
+      mass: 1,
       render: {
         strokeStyle: '#fffb',
         fillStyle: 'transparent',
@@ -105,10 +105,10 @@ export default function Pendulum(props: PendulumProps) {
     const engine = engineRef.current;
     const pendulum = pendulumRef.current;
 
-    if (engine && pendulum && props.frictionAir && props.mass && props.gravity) {
+    if (engine && pendulum && props.frictionAir !== undefined && props.mass !== undefined && props.gravity !== undefined) {
       pendulum.frictionAir = props.frictionAir;
       Body.setMass(pendulum, props.mass);
-      engine.gravity = {scale: 0.01, x: 0, y: props.gravity};
+      engine.gravity = {scale: props.gravity / 1000, x: 0, y: 1};
     }
 
     return () => {};

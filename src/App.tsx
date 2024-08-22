@@ -13,7 +13,7 @@ export default function App() {
   const [kD, setKD] = useState(200);
   const [frictionAir, setFrictionAir] = useState(0);
   const [mass, setMass] = useState(1);
-  const [gravity, setGravity] = useState(1);
+  const [gravity, setGravity] = useState(0);
 
   const [inputTarget, setInputTarget] = useState(0);
   const [inputKP, setInputKP] = useState(10);
@@ -37,7 +37,7 @@ export default function App() {
     setKD(200);
     setFrictionAir(0);
     setMass(1);
-    setGravity(1);
+    setGravity(0);
   }
 
   const handleUpdatePrefs = () => {
@@ -97,8 +97,7 @@ export default function App() {
       <InputSlider 
         label="gravity"
         value={inputGravity}
-        min={0}
-        max={1}
+        max={10}
         step={0.1}
         handleChange={setInputGravity}
       />
