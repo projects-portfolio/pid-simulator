@@ -6,6 +6,7 @@ import PIDController from '../controller/PID.ts';
 import { bound } from './utils.ts';
 
 interface PendulumProps {
+    userSetAngle: number;
     kP: number;
     kI: number;
     kD: number;
@@ -112,7 +113,7 @@ export default function Pendulum(props: PendulumProps) {
 
             function applyTorque(pid) {
                 pendulum.torque = bound(pid.step(pendulum.angle, 1), -5, 5);
-                
+
                 props.setPosition((data) => [...data, pendulum.angle]);
                 props.setPower((data) => [...data, pendulum.torque]);
             }
@@ -153,6 +154,13 @@ export default function Pendulum(props: PendulumProps) {
     Body.setAngle(pendulum, 0);
     Sleeping.set(pendulum, true);
   }, [props.reset, props.setReset]);
+
+  useEffect(() => {
+    if (props.paused) {
+        const pendulum = pendulumRef.current;
+        Body.setAngle(pendulum, props.userSetAngle);
+    }
+  }, [props.userSetAngle])
 
   return <div ref={canvasRef} className="canvas"></div>;
 }

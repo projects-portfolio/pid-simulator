@@ -22,5 +22,5 @@ export default function Graph(props: GraphProps) {
     ],
   };
 
-  return <div><Line data={data} /></div>
+  return <div><Line data={data} width="250px" height="250px" /></div>
 }

@@ -42,6 +42,8 @@ export default function App() {
   const [playState, setPlayState] = useState(false);
   const [resetState, setResetState] = useState(true);
 
+  const [userSetAngle, setUserSetAngle] = useState(0);
+
   const handleResetClick = () => {
     setInputFields(
       {
@@ -52,6 +54,12 @@ export default function App() {
         frictionAir: 0,
         mass: 1,
         gravity: 0,
+      }
+    );
+
+    setCurrentConstants(
+      {
+        ...inputFields,
       }
     );
 
@@ -84,6 +92,10 @@ export default function App() {
     console.log(e.target.name);
   }
 
+  const handleUpdateUserAngle = (e) => {
+    setUserSetAngle(e.target.value);
+  }
+
   // const handleUpdateMetrics = (...datapoint) => {
   //   setMetrics(
   //     {
@@ -103,6 +115,7 @@ export default function App() {
 
       <div className="pendulum-container">
         <Pendulum 
+          userSetAngle={userSetAngle}
           {...currentConstants}
           paused={!playState} 
           reset={resetState}
@@ -113,6 +126,14 @@ export default function App() {
       </div>
 
       <div className="slider-container">
+        <InputSlider
+          name="userSetAngle"
+          label="Set Angle (in Radians)"
+          value={userSetAngle}
+          max={2 * Math.PI}
+          step={Math.PI / 8}
+          handleChange={handleUpdateUserAngle}
+        />
         <InputSlider 
           name="target"
           label="Target Angle (in Radians)"
