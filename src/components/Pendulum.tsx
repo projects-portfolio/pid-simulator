@@ -6,7 +6,6 @@ import PIDController from '../controller/PID.ts';
 import { bound } from './utils.ts';
 
 interface PendulumProps {
-    userSetAngle: number;
     kP: number;
     kI: number;
     kD: number;
@@ -86,6 +85,8 @@ export default function Pendulum(props: PendulumProps) {
     runnerRef.current = runner;
     pendulumRef.current = pendulum;
 
+    props.setReset(false);
+
     return () => {
       Engine.clear(engine);
       Render.stop(render);
@@ -95,7 +96,7 @@ export default function Pendulum(props: PendulumProps) {
       // render.context = null;
       render.textures = {};
     };
-  }, []);
+  }, [props.reset, props.setReset]);
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -140,27 +141,6 @@ export default function Pendulum(props: PendulumProps) {
 
     return () => {};
   }, [props.frictionAir, props.mass, props.gravity]);
-
-  useEffect(() => {
-    props.setReset(false);
-
-    const pendulum = pendulumRef.current;
-    const engine = engineRef.current;
-
-    Events.off(engine);
-
-    engine!.gravity = {scale: 0, x: 0, y: 1};
-
-    Body.setAngle(pendulum, 0);
-    Sleeping.set(pendulum, true);
-  }, [props.reset, props.setReset]);
-
-  useEffect(() => {
-    if (props.paused) {
-        const pendulum = pendulumRef.current;
-        Body.setAngle(pendulum, props.userSetAngle);
-    }
-  }, [props.userSetAngle])
 
   return <div ref={canvasRef} className="canvas"></div>;
 }

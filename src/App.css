@@ -15,14 +15,13 @@ html, body {
 }
 
 .tutorial-container {
-  order: 1;
+
 }
 
 .pendulum-container {
   height: 100%;
-  width: 500px;
+  width: 750px;
   position: relative;
-  order: 2;
 }
 
 .slider-container {
@@ -30,8 +29,6 @@ html, body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  float: left;
-  order: 3;
 }
 
 .buttons-container {
@@ -40,13 +37,4 @@ html, body {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-}
-
-.graphs-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  order: 4;
 }

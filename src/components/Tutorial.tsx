@@ -16,6 +16,7 @@ export default function Tutorial() {
                     <HelpOutline />
                 </IconButton>
             </Tooltip>
+
             <Modal
                 open={open}
                 aria-labelledby="tutorial-title"
