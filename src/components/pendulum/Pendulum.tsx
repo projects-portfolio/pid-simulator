@@ -1,25 +1,29 @@
-import './Pendulum.css';
+/*
+* Defines our component that renders the pendulum and simulates the PID
+* The pendulum is built on matter.js
+*/
 
+import './Pendulum.css';
 import React, { useEffect, useRef } from 'react';
 import { Engine, Render, Runner, Events, Body, Bodies, Composite, Constraint, Sleeping } from 'matter-js';
-import PIDController from '../controller/PID.ts';
-import { bound } from './utils.ts';
+import PIDController from '../../controller/PID.ts';
+import { bound } from '../../controller/utils.ts';
 
 interface PendulumProps {
-    kP: number;
-    kI: number;
-    kD: number;
-    target: number;
-    frictionAir: number;
-    mass: number;
-    gravity: number;
-    
-    paused: boolean;
-    reset: boolean;
-    setReset: Function;
-    
-    setPosition: Function;
-    setPower: Function;
+  kP: number;
+  kI: number;
+  kD: number;
+  target: number;
+  frictionAir: number;
+  mass: number;
+  gravity: number;
+  
+  paused: boolean;
+  reset: boolean;
+  setReset: Function;
+  
+  setPosition: Function;
+  setPower: Function;
 }
 
 export default function Pendulum(props: PendulumProps) {
@@ -103,31 +107,32 @@ export default function Pendulum(props: PendulumProps) {
     const pendulum = pendulumRef.current;
 
     if (engine && pendulum) {
-        if (props.paused) {
-            engine!.gravity = {scale: 0, x: 0, y: 1};
-            Sleeping.set(pendulum, true);
-        } else {
-            engine!.gravity = {scale: props.gravity / 1000, x: 0, y: 1};
-            Sleeping.set(pendulum, false);
+      if (props.paused) {
+        engine!.gravity = {scale: 0, x: 0, y: 1};
+        Sleeping.set(pendulum, true);
+      } else {
+        engine!.gravity = {scale: props.gravity / 1000, x: 0, y: 1};
+        Sleeping.set(pendulum, false);
 
-            pidRef.current = new PIDController(props.kP, props.kI, props.kD, pendulum.angle, props.target);
+        pidRef.current = new PIDController(props.kP, props.kI, props.kD, pendulum.angle, props.target);
 
-            function applyTorque(pid) {
-                pendulum.torque = bound(pid.step(pendulum.angle, 1), -5, 5);
-
-                props.setPosition((data) => [...data, pendulum.angle]);
-                props.setPower((data) => [...data, pendulum.torque]);
-            }
-
-            Events.on(engine, 'afterUpdate', () => applyTorque(pidRef.current));
+        function applyTorque(pid) {
+          pendulum.torque = bound(pid.step(pendulum.angle, 1), -5, 5);
+          
+          // improve performance issues from this
+          props.setPosition((data) => [...data, pendulum.angle]);
+          props.setPower((data) => [...data, pendulum.torque]);
         }
+
+        Events.on(engine, 'afterUpdate', () => applyTorque(pidRef.current));
+      }
     }
 
     return () => {
       //Events.off(engine, '', () => {});
       Events.off(engine);
     }
-  }, [props.kP, props.kI, props.kD, props.target, props.paused, props.setPosition, props.setPower]);
+  }, [props.kP, props.kI, props.kD, props.target, props.paused]);
 
   useEffect(() => {
     const engine = engineRef.current;

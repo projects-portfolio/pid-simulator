@@ -1,3 +1,8 @@
+/*
+* Defines InputSlider component used for user input gains and physical constants
+* Combines Slider from Material UI and regular input field
+*/
+
 import React from 'react';
 import './InputSlider.css';
 import { Slider } from '@mui/material';

@@ -1,5 +1,10 @@
+/*
+* Defines Tutorial modal component
+* Uses components from Material UI
+*/
+
 import React, { useState } from 'react';
-import '../App.css';
+import '../../App.css';
 import { IconButton, Modal, Box, Tooltip } from '@mui/material'
 import { Close, HelpOutline } from '@mui/icons-material';
 

@@ -1,3 +1,7 @@
+/*
+* Defines Graph component using chart.js for all our graphs
+*/
+
 import React from 'react';
 import 'chart.js/auto';
 import { Line } from "react-chartjs-2";

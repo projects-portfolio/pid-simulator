@@ -1,17 +1,17 @@
-import './App.css';
+/*
+* Aggregates our components together for the simulator
+*/
 
+import './App.css';
 import React, { useState } from 'react';
-import Pendulum from './components/Pendulum.tsx'
-import Graph from './components/Graph.tsx'
-import InputSlider from './components/InputSlider.tsx'
-import Tutorial from './components/Tutorial.tsx'
+import Pendulum from './components/pendulum/Pendulum.tsx'
+import Graph from './components/graphs/Graph.tsx'
+import InputSlider from './components/inputs/InputSlider.tsx'
+import Tutorial from './components/modals/Tutorial.tsx'
 import { IconButton, Button } from '@mui/material'
 import { PlayCircle, PauseCircle } from '@mui/icons-material'
 
 export default function App() {
-  // https://codepen.io/rafaelcastrocouto/pen/NWajBgM
-  // https://blog.stackademic.com/matter-js-with-react-and-learn-to-use-useref-effectively-8f57365b926e
-
   const [currentConstants, setCurrentConstants] = useState(
     {
       target: 0,
@@ -101,6 +101,7 @@ export default function App() {
   //   console.log("Position: " + JSON.stringify(metrics.position));
   // }
 
+  // TODO: split this into subcomponents
   return (
     <div className="main-container">
       <div className="tutorial-container">
